@@ -1,0 +1,41 @@
+package tech.lmru.auth.grpc.service.impl;
+
+import io.grpc.stub.StreamObserver;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.oauth2.provider.endpoint.AuthorizationEndpoint;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import tech.lmru.auth.grpc.config.GRPCService;
+import tech.lmru.auth.grpc.service.generated.impl.AuthorizationRequest;
+import tech.lmru.auth.grpc.service.generated.impl.AuthorizationResponse;
+import tech.lmru.auth.grpc.service.generated.impl.AuthorizeServiceGrpc;
+
+import javax.inject.Inject;
+import java.security.Principal;
+import java.util.Map;
+
+
+/**
+ * Created by Ilya on 10.03.2019.
+ */
+
+@GRPCService
+public class AuthorizationServiceImpl extends AuthorizeServiceGrpc.AuthorizeServiceImplBase {
+
+    @Inject
+    AuthorizationEndpoint endpoint;
+
+    @Override
+    public void authorize(AuthorizationRequest request, StreamObserver<AuthorizationResponse> responseObserver) {
+        Map<String, Object> model = null;
+        Map<String, String> parameters =null;
+        SessionStatus sessionStatus = null;
+        Principal principal = null;
+        endpoint.authorize(model, parameters, sessionStatus, principal);
+        AuthorizationResponse response = AuthorizationResponse.newBuilder()
+                .setAuthorize(true).build();
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
+}

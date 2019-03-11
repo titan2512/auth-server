@@ -1,0 +1,15 @@
+syntax = "proto3";
+option java_multiple_files = true;
+package tech.lmru.auth.grpc.service.generated.impl;
+
+message AuthorizationRequest{
+    string name= 1;
+}
+
+message AuthorizationResponse {
+    bool authorize = 1;
+}
+
+service AuthorizeService {
+    rpc authorize(AuthorizationRequest) returns (AuthorizationResponse);
+}
