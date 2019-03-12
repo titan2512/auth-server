@@ -1,11 +1,8 @@
 package tech.lmru.auth.grpc.service.impl;
 
 import io.grpc.stub.StreamObserver;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.provider.endpoint.AuthorizationEndpoint;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import tech.lmru.auth.grpc.config.GRPCService;
 import tech.lmru.auth.grpc.service.generated.impl.AuthorizationRequest;
 import tech.lmru.auth.grpc.service.generated.impl.AuthorizationResponse;
@@ -38,4 +35,6 @@ public class AuthorizationServiceImpl extends AuthorizeServiceGrpc.AuthorizeServ
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }
+    
+    
 }
