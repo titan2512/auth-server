@@ -1,24 +1,22 @@
 package tech.lmru.auth.grpc.service.impl;
 
-import java.security.Principal;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.inject.Inject;
-
+import io.grpc.stub.StreamObserver;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
-
-import io.grpc.stub.StreamObserver;
+import tech.lmru.auth.grpc.config.GRPCService;
 import tech.lmru.auth.grpc.service.generated.impl.AccessToken;
 import tech.lmru.auth.grpc.service.generated.impl.AuthorizationRequest;
 import tech.lmru.auth.grpc.service.generated.impl.TokenServiceGrpc.TokenServiceImplBase;
 
+import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
+
+@GRPCService
 public class TokenServiceImpl extends TokenServiceImplBase {
     
-    @Inject 
+   // @Inject
     TokenEndpoint tokenEndpoint;
     
     @Override
@@ -30,8 +28,7 @@ public class TokenServiceImpl extends TokenServiceImplBase {
 		Map<String, String> parameters = new HashMap();
 		try {
 			ResponseEntity<OAuth2AccessToken> oathToken = tokenEndpoint.postAccessToken(principal, parameters);
-		} catch (HttpRequestMethodNotSupportedException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		AccessToken response = AccessToken.newBuilder()
@@ -40,8 +37,6 @@ public class TokenServiceImpl extends TokenServiceImplBase {
                 .build();
         responseObserver.onNext(response);
         responseObserver.onCompleted();
-        
-        
     }
     
 }

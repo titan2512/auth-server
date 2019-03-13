@@ -1,0 +1,16 @@
+  auth-server:
+    grpc:
+      port: 8040
+
+    jdbc :
+      driverClassName : org.postgresql.Driver
+      url : jdbc:postgresql://localhost:5432/lm_planning_auth
+      user : lm_auth
+      password : lm_auth
+
+
+  server:
+    port: 8081
+    servlet:
+      context-path: /auth
+

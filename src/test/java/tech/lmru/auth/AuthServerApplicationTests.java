@@ -1,4 +1,4 @@
-package lm.planning;
+package tech.lmru.auth;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

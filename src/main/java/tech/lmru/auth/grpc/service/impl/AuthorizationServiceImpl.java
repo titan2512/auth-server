@@ -1,14 +1,12 @@
 package tech.lmru.auth.grpc.service.impl;
 
 import io.grpc.stub.StreamObserver;
-import org.springframework.security.oauth2.provider.endpoint.AuthorizationEndpoint;
 import org.springframework.web.bind.support.SessionStatus;
 import tech.lmru.auth.grpc.config.GRPCService;
 import tech.lmru.auth.grpc.service.generated.impl.AuthorizationRequest;
 import tech.lmru.auth.grpc.service.generated.impl.AuthorizationResponse;
 import tech.lmru.auth.grpc.service.generated.impl.AuthorizeServiceGrpc;
 
-import javax.inject.Inject;
 import java.security.Principal;
 import java.util.Map;
 
@@ -20,16 +18,13 @@ import java.util.Map;
 @GRPCService
 public class AuthorizationServiceImpl extends AuthorizeServiceGrpc.AuthorizeServiceImplBase {
 
-    @Inject
-    AuthorizationEndpoint endpoint;
-
     @Override
     public void authorize(AuthorizationRequest request, StreamObserver<AuthorizationResponse> responseObserver) {
         Map<String, Object> model = null;
         Map<String, String> parameters =null;
         SessionStatus sessionStatus = null;
         Principal principal = null;
-        endpoint.authorize(model, parameters, sessionStatus, principal);
+        //endpoint.authorize(model, parameters, sessionStatus, principal);
         AuthorizationResponse response = AuthorizationResponse.newBuilder()
                 .setAuthorize(true).build();
         responseObserver.onNext(response);
