@@ -1,12 +1,15 @@
 package tech.lmru.auth.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
@@ -20,7 +23,7 @@ import javax.sql.DataSource;
  * Created by Ilya on 06.03.2019.
  */
 @Configuration
-//@EnableAuthorizationServer
+@EnableAuthorizationServer
 public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
@@ -36,12 +39,12 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
         oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
     }
 
-   // @Override
+    @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
                 .withClient("service-ui")
                 .secret("service-ui-pass")
-                .authorizedGrantTypes("password", "refresh_token")
+                .authorizedGrantTypes("client_credentials", "refresh_token")
                 .scopes("read", "write")
                 .accessTokenValiditySeconds(60);
     }
@@ -88,6 +91,11 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
         dataSource.setUsername(applicationProperties.getJdbc().getUser());
         dataSource.setPassword(applicationProperties.getJdbc().getPassword());
         return dataSource;
+    }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
 }

@@ -4,10 +4,19 @@ package tech.lmru.auth.grpc.service.generated.impl;
 
 message AuthorizationRequest{
     string name= 1;
+    string pass = 2;
 }
 
 message AuthorizationResponse {
     bool authorize = 1;
+}
+
+message AuthenticationRequest{
+    string name = 1;
+    string pass = 2;
+    string clientId= 3;
+    string grantType = 4;
+    string secret = 5;
 }
 
 message AccessToken {
@@ -20,5 +29,5 @@ service AuthorizeService {
 }
 
 service TokenService {
-    rpc getToken(AuthorizationRequest) returns (AccessToken);
+    rpc getToken(AuthenticationRequest) returns (AccessToken);
 }
