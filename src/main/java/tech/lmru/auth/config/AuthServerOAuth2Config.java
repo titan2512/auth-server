@@ -12,6 +12,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
@@ -33,6 +34,9 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
    // @Qualifier("authenticationManagerBean")
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private ClientDetailsService clientDetailsService;
+
    // @Override
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
         //oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
@@ -46,36 +50,37 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
                 .secret("service-ui-pass")
                 .authorizedGrantTypes("client_credentials", "refresh_token")
                 .scopes("read", "write")
-                .accessTokenValiditySeconds(60);
+                .accessTokenValiditySeconds(2);
     }
 
-    //@Override
+    @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints.tokenServices(tokenServices());
-        endpoints.tokenStore(tokenStore()).authenticationManager(authenticationManager);
+        endpoints.tokenServices(tokenServices())
+                .tokenStore(tokenStore()).authenticationManager(authenticationManager);
     }
 
-
-    //@Bean
+    @Bean
     public DefaultTokenServices tokenServices() {
         DefaultTokenServices services = new DefaultTokenServices();
         services.setTokenStore(tokenStore());
         services.setTokenEnhancer(tokenEnhancer());
+        services.setClientDetailsService(clientDetailsService);
         services.setSupportRefreshToken(true);
         return services;
     }
 
-    //@Bean
+
+    @Bean
     public TokenStore tokenStore() {
         return new JwtTokenStore(tokenEnhancer());
 }
 
-   // @Bean
+    @Bean
     public JwtAccessTokenConverter tokenEnhancer() {
         return new JwtAccessTokenConverter();
     }
 
-   // @Bean
+    @Bean
     public DataSourceInitializer dataSourceInitializer(DataSource dataSource) {
         DataSourceInitializer initializer = new DataSourceInitializer();
         initializer.setDataSource(dataSource);
@@ -83,7 +88,7 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
     }
 
 
-   // @Bean
+    @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(applicationProperties.getJdbc().getDriverClassName());
