@@ -6,6 +6,8 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
+//@EnableJpaRepositories(basePackages = "tech.lmru.repo")
+//@EntityScan("tech.lmru")
 public class AuthServerApplication extends SpringBootServletInitializer {
 
 	@Override
