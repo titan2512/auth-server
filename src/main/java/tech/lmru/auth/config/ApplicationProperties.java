@@ -13,16 +13,20 @@ public class ApplicationProperties {
 
     private final Grpc grpc= new Grpc();
     private final Jdbc jdbc = new Jdbc();
+    private final TokenServiceProp tokenService = new TokenServiceProp();
+
+    @Data
+    public static class TokenServiceProp{
+        private int tokenValidSecond;
+    }
 
     @Data
     public static class Grpc{
-
         private int port;
     }
 
     @Data
     public static class Jdbc{
-
         private String driverClassName;
         private String url;
         private String user;

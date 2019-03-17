@@ -2,18 +2,11 @@ syntax = "proto3";
 option java_multiple_files = true;
 package tech.lmru.auth.grpc.service.generated.impl;
 
-message SimpleMess{
-    string info =1;
+message ErrorDescription{
+    string errorCode =1;
+    string errorMessage =2;
 }
 
-message AuthorizationRequest{
-    string name= 1;
-    string pass = 2;
-}
-
-message AuthorizationResponse {
-    bool authorize = 1;
-}
 
 message AuthenticationRequest{
     string name = 1;
@@ -21,18 +14,16 @@ message AuthenticationRequest{
     string clientId= 3;
     string grantType = 4;
     string secret = 5;
+    string scope = 6;
 }
 
 message AccessToken {
     string jti =1;
     string token = 2;
-}
-
-service AuthorizeService {
-    rpc authorize(AuthorizationRequest) returns (AuthorizationResponse);
+    ErrorDescription error =3;
 }
 
 service TokenService {
     rpc getToken(AuthenticationRequest) returns (AccessToken);
-    rpc checkToken(SimpleMess) returns (AccessToken);
+    rpc checkToken(AccessToken) returns (AccessToken);
 }

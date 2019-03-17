@@ -1,6 +1,7 @@
 package tech.lmru.auth.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -17,6 +18,7 @@ import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import tech.lmru.auth.jwt.converter.JwtAccessWithUserCredentialTokenConverter;
 
 import javax.sql.DataSource;
 
@@ -30,18 +32,12 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
     @Autowired
     private ApplicationProperties applicationProperties;
 
-   // @Autowired
-   // @Qualifier("authenticationManagerBean")
+    @Autowired
+    @Qualifier("authenticationManagerBean")
     private AuthenticationManager authenticationManager;
 
     @Autowired
     private ClientDetailsService clientDetailsService;
-
-   // @Override
-    public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
-        //oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
-        oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
-    }
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -50,8 +46,9 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
                 .secret("service-ui-pass")
                 .authorizedGrantTypes("client_credentials", "refresh_token")
                 .scopes("read", "write")
-                .accessTokenValiditySeconds(2);
+                .accessTokenValiditySeconds(applicationProperties.getTokenService().getTokenValidSecond());
     }
+
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
@@ -65,19 +62,18 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
         services.setTokenStore(tokenStore());
         services.setTokenEnhancer(tokenEnhancer());
         services.setClientDetailsService(clientDetailsService);
-        services.setSupportRefreshToken(true);
         return services;
     }
 
 
     @Bean
-    public TokenStore tokenStore() {
-        return new JwtTokenStore(tokenEnhancer());
-}
+    public JwtAccessWithUserCredentialTokenConverter tokenEnhancer(){
+        return new JwtAccessWithUserCredentialTokenConverter();
+    }
 
     @Bean
-    public JwtAccessTokenConverter tokenEnhancer() {
-        return new JwtAccessTokenConverter();
+    public TokenStore tokenStore() {
+        return new JwtTokenStore(tokenEnhancer());
     }
 
     @Bean
