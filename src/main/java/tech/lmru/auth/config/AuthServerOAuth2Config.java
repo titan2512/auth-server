@@ -43,17 +43,17 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
                 .secret("service-ui-pass")
                 .authorizedGrantTypes("client_credentials", "refresh_token")
                 .scopes("read", "write")
-                .accessTokenValiditySeconds(applicationProperties.getTokenService().getTokenValidSecond());
+                .accessTokenValiditySeconds(applicationProperties.getTokenServiceProp().getTokenValidSecond());
     }
 
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.tokenServices(tokenServices())
-                .tokenStore(tokenStore()).authenticationManager(authenticationManager);
+        .tokenStore(tokenStore()).authenticationManager(authenticationManager);
     }
 
-    @Bean
+    //@Bean
     public DefaultTokenServices tokenServices() {
         DefaultTokenServices services = new DefaultTokenServices();
         services.setTokenStore(tokenStore());
@@ -73,23 +73,6 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
         return new JwtTokenStore(tokenEnhancer());
     }
 
-    //@Bean
-    public DataSourceInitializer dataSourceInitializer(DataSource dataSource) {
-        DataSourceInitializer initializer = new DataSourceInitializer();
-        initializer.setDataSource(dataSource);
-        return initializer;
-    }
-
-
-    //@Bean
-    public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(applicationProperties.getJdbc().getDriverClassName());
-        dataSource.setUrl(applicationProperties.getJdbc().getUrl());
-        dataSource.setUsername(applicationProperties.getJdbc().getUser());
-        dataSource.setPassword(applicationProperties.getJdbc().getPassword());
-        return dataSource;
-    }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {

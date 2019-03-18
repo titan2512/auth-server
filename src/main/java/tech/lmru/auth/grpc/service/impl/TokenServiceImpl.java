@@ -69,6 +69,8 @@ public class TokenServiceImpl extends TokenServiceImplBase {
             OAuth2Authentication principal = new OAuth2Authentication(oauth2Request, userAuthentication);
             ResponseEntity<OAuth2AccessToken> resp = tokenEndpoint.postAccessToken(principal, parameters);
             accessToken = resp.getBody();
+            logger.info(accessToken.toString());
+            logger.info(accessToken.getValue());
             responseBuilder
                     .setToken(Optional.ofNullable(accessToken).map(OAuth2AccessToken::getValue).orElse(""))
                     .setJti((String) Optional.ofNullable(accessToken).map(t-> t.getAdditionalInformation().getOrDefault(

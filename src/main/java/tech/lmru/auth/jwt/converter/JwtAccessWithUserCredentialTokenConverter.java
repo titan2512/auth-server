@@ -40,7 +40,6 @@ import static java.util.stream.Collectors.joining;
 public class JwtAccessWithUserCredentialTokenConverter extends JwtAccessTokenConverter implements InitializingBean {
 
     public static final String USER_CREDENTIAL = "usrCrd";
-    public static final String USER_AUTHORITIES = "usrAuth";
 
     private AccessTokenConverter tokenConverter = new DefaultAccessTokenConverter();
     private final  Logger logger = LoggerFactory.getLogger(JwtAccessWithUserCredentialTokenConverter.class);
@@ -158,7 +157,7 @@ public class JwtAccessWithUserCredentialTokenConverter extends JwtAccessTokenCon
 
         OAuth2AccessTokenWithUserCredential result = new OAuth2AccessTokenWithUserCredential(accessToken,(Collection<GrantedAuthority>) userAuthorities);
         Map<String, Object> info = new LinkedHashMap(accessToken.getAdditionalInformation());
-        info.put(USER_AUTHORITIES, getUserAuthoritiesString((Collection<GrantedAuthority>) userAuthorities));
+        info.put(USER_CREDENTIAL, getUserAuthoritiesString((Collection<GrantedAuthority>) userAuthorities));
 
         String tokenId = result.getValue();
         if(!info.containsKey("jti")) {

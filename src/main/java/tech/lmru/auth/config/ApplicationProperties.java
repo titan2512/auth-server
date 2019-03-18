@@ -13,7 +13,7 @@ public class ApplicationProperties {
 
     private final Grpc grpc= new Grpc();
     private final Jdbc jdbc = new Jdbc();
-    private final TokenServiceProp tokenService = new TokenServiceProp();
+    private final TokenServiceProp tokenServiceProp = new TokenServiceProp();
 
     @Data
     public static class TokenServiceProp{

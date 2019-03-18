@@ -5,11 +5,14 @@
 
     jdbc :
       driverClassName : org.postgresql.Driver
-      url : jdbc:postgresql://localhost:5432/lm_planning_auth
-      user : postgres
-      password : postgres
+      host: 192.168.63.15
+      port : 15432
+      name : sampledb
+      user : userUD6
+      password : fXrgrCUiw7rXOXLe
+      url : jdbc:postgresql://${auth-server.jdbc.host}:${auth-server.jdbc.port}/${auth-server.jdbc.name}
 
-    tokenService:
+    tokenServiceProp:
       tokenValidSecond : 28800
 
   server :
@@ -27,7 +30,7 @@
         enabled: true
     datasource:
       type: com.zaxxer.hikari.HikariDataSource
-      url: jdbc:postgresql://localhost:5432/lm_planning_auth
+      url: jdbc:postgresql://${auth-server.jdbc.host}:${auth-server.jdbc.port}/${auth-server.jdbc.name}
       name:
       username: ${auth-server.jdbc.user}
       password: ${auth-server.jdbc.password}

@@ -39,30 +39,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    protected void configure(HttpSecurity http) throws Exception {
-
-        http.anonymous().disable()
-                .antMatcher("/oauth/token")
-                .authorizeRequests().anyRequest().authenticated()
-                .and()
-                .httpBasic().authenticationEntryPoint(authenticationEntryPoint())
-                .and()
-                .csrf().requireCsrfProtectionMatcher(new AntPathRequestMatcher("/oauth/token")).disable()
-                .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-    }
-
-    //@Bean
-    protected AccessDeniedHandler accessDeniedHandler() {
-        return new OAuth2AccessDeniedHandler();
-    }
-
-    //@Bean
-    protected AuthenticationEntryPoint authenticationEntryPoint() {
-        OAuth2AuthenticationEntryPoint entryPoint = new OAuth2AuthenticationEntryPoint();
-        entryPoint.setTypeName("Basic");
-        entryPoint.setRealmName("oauth2/client");
-        return entryPoint;
-    }
 }
