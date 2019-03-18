@@ -9,15 +9,13 @@ message Permission {
     int32 id = 1;
     string code = 2;
     string name = 3;
-    repeated Role roles = 4;
 }
 
 message Role {
     int32 id = 1;
     string code = 2;
     string name = 3;
-    repeated User users = 4;
-    repeated Permission permissions = 5;
+    repeated Permission permissions = 4;
 }
 
 message User {
@@ -58,7 +56,7 @@ service PermissionCreateOrUpdateService {
 }
 
 service PermissionReadByIdService {
-    rpc readByIdRole(EntityIdRequest) returns (Permission);
+    rpc readByIdPermission(EntityIdRequest) returns (Permission);
 }
 
 service PermissionReadAllService {
