@@ -30,7 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.inMemoryAuthentication()
                 .withUser("testUser").password(passwordEncoder.encode("123"))
                 .roles("USER")
-                .authorities(new SimpleGrantedAuthority("test_auth"));
+                .authorities(new SimpleGrantedAuthority("test_cred1"), new SimpleGrantedAuthority("test_cred2"));
     }
 
     @Bean
