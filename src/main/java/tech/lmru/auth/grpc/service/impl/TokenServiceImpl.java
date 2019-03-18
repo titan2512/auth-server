@@ -3,30 +3,35 @@ package tech.lmru.auth.grpc.service.impl;
 import io.grpc.stub.StreamObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.common.exceptions.*;
+import org.springframework.security.oauth2.common.exceptions.InvalidClientException;
+import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
+import org.springframework.security.oauth2.common.exceptions.InvalidRequestException;
+import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
+import org.springframework.security.oauth2.common.exceptions.UnsupportedGrantTypeException;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Request;
 import org.springframework.security.oauth2.provider.endpoint.CheckTokenEndpoint;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
 import org.springframework.security.oauth2.provider.token.AccessTokenConverter;
-import org.springframework.web.server.handler.ExceptionHandlingWebHandler;
 import tech.lmru.auth.grpc.config.GRPCService;
 import tech.lmru.auth.grpc.service.generated.impl.AccessToken;
 import tech.lmru.auth.grpc.service.generated.impl.AuthenticationRequest;
+import tech.lmru.auth.grpc.service.generated.impl.CheckTokenRequest;
 import tech.lmru.auth.grpc.service.generated.impl.ErrorDescription;
 import tech.lmru.auth.grpc.service.generated.impl.TokenServiceGrpc.TokenServiceImplBase;
 
 import javax.inject.Inject;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
 
 @GRPCService
 public class TokenServiceImpl extends TokenServiceImplBase {
@@ -72,6 +77,7 @@ public class TokenServiceImpl extends TokenServiceImplBase {
             responseBuilder.setError(ErrorDescription.newBuilder().setErrorCode("AuthError").setErrorMessage(e.getMessage()));
         } catch (Exception e) {
             responseBuilder.setError(ErrorDescription.newBuilder().setErrorCode("UnknownError").setErrorMessage(e.getMessage()));
+            logger.error("Internal server error -getToken: ", e);
         }finally {
             response = responseBuilder.build();
         }
@@ -80,21 +86,21 @@ public class TokenServiceImpl extends TokenServiceImplBase {
     }
 
     @Override
-    public void checkToken(AccessToken request, StreamObserver<AccessToken> responseObserver) {
+    public void checkToken(CheckTokenRequest request, StreamObserver<AccessToken> responseObserver) {
         Map<String, ?> map = null;
         AccessToken response = null;
         AccessToken.Builder responseBuilder = AccessToken.newBuilder();
         try {
             map = checkTokenEndpoint.checkToken(request.getToken());
             responseBuilder
-                    .setToken(request.getToken())
-                    .setJti(request.getJti());
+                    .setToken(request.getToken());
 
             logger.info(map.toString());
         }catch (InvalidTokenException e){
             responseBuilder.setError(ErrorDescription.newBuilder().setErrorCode("InvalidToken").setErrorMessage(e.getMessage()));
         }catch (Exception e){
             responseBuilder.setError(ErrorDescription.newBuilder().setErrorCode("UnknownError").setErrorMessage(e.getMessage()));
+            logger.error("Internal server error -checkToken: ", e);
         }finally {
             response = responseBuilder.build();
         }

@@ -7,7 +7,6 @@ message ErrorDescription{
     string errorMessage =2;
 }
 
-
 message AuthenticationRequest{
     string name = 1;
     string pass = 2;
@@ -23,7 +22,11 @@ message AccessToken {
     ErrorDescription error =3;
 }
 
+message CheckTokenRequest {
+    string token = 1;
+}
+
 service TokenService {
     rpc getToken(AuthenticationRequest) returns (AccessToken);
-    rpc checkToken(AccessToken) returns (AccessToken);
+    rpc checkToken(CheckTokenRequest) returns (AccessToken);
 }
