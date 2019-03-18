@@ -1,0 +1,104 @@
+syntax = "proto3";
+option java_multiple_files = true;
+package tech.lmru.auth.grpc.service.generated.impl;
+
+message Empty {
+}
+
+message Permission {
+    int32 id = 1;
+    string code = 2;
+    string name = 3;
+}
+
+message Role {
+    int32 id = 1;
+    string code = 2;
+    string name = 3;
+    repeated Permission permissions = 4;
+}
+
+message User {
+    int32 id = 1;
+    string code = 2;
+    string name = 3;
+    repeated Role roles = 4;
+}
+
+message EntityIdRequest {
+    string id = 1;
+}
+
+message PermissionAllResponse {
+    repeated Permission permissions = 1;
+}
+
+message RoleAllResponse {
+    repeated Role roles = 1;
+}
+
+message UserAllResponse {
+    repeated User users = 1;
+}
+
+message EntityDeleteResponse {
+    bool success = 1;
+}
+
+message EntityCreateResponse {
+    int32 id = 1;
+}
+
+// Permission API
+
+service PermissionCreateOrUpdateService {
+    rpc createOrUpdatePermission(Permission) returns (EntityCreateResponse);
+}
+
+service PermissionReadByIdService {
+    rpc readByIdPermission(EntityIdRequest) returns (Permission);
+}
+
+service PermissionReadAllService {
+    rpc readAllPermission(Empty) returns (PermissionAllResponse);
+}
+
+service PermissionDeleteByIdService {
+    rpc deleteByIdPermission(EntityIdRequest) returns (EntityDeleteResponse);
+}
+
+// Roles API
+
+service RoleCreateOrUpdateService {
+    rpc createOrUpdateRole(Role) returns (EntityCreateResponse);
+}
+
+service RoleReadByIdService {
+    rpc readByIdRole(EntityIdRequest) returns (Role);
+}
+
+service RoleReadAllService {
+    rpc readAllRole(Empty) returns (RoleAllResponse);
+}
+
+service RoleDeleteByIdService {
+    rpc deleteByIdRole(EntityIdRequest) returns (EntityDeleteResponse);
+}
+
+// Users API
+
+service UserCreateOrUpdateService {
+    rpc createOrUpdateUser(User) returns (EntityCreateResponse);
+}
+
+service UserReadByIdService {
+    rpc readByIdUser(EntityIdRequest) returns (User);
+}
+
+service UserReadAllService {
+    rpc readAllUser(Empty) returns (UserAllResponse);
+}
+
+service UserDeleteByIdService {
+    rpc deleteByIdUser(EntityIdRequest) returns (EntityDeleteResponse);
+}
