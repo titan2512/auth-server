@@ -77,7 +77,6 @@ public class JwtAccessWithUserCredentialTokenConverter extends JwtAccessTokenCon
         Map<String, Object> result = (Map<String, Object>) tokenConverter.convertAccessToken(token, authentication);
 
         if (token instanceof OAuth2AccessTokenWithUserCredential){
-            logger.info("OAuth2AccessTokenWithUserCredential convert"); //TODO
             OAuth2AccessTokenWithUserCredential accessToken = (OAuth2AccessTokenWithUserCredential)token;
             result.put(USER_CREDENTIAL, getUserAuthoritiesString(accessToken.getUserAuthorities()));
         }

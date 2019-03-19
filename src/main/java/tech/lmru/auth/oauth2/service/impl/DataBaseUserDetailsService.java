@@ -1,4 +1,4 @@
-package tech.lmru.auth.grpc.service.impl;
+package tech.lmru.auth.oauth2.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;

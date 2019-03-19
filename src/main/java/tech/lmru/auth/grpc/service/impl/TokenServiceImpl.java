@@ -69,12 +69,12 @@ public class TokenServiceImpl extends TokenServiceImplBase {
             OAuth2Authentication principal = new OAuth2Authentication(oauth2Request, userAuthentication);
             ResponseEntity<OAuth2AccessToken> resp = tokenEndpoint.postAccessToken(principal, parameters);
             accessToken = resp.getBody();
-            logger.info(accessToken.toString());
-            logger.info(accessToken.getValue());
+            String jti = (String) Optional.ofNullable(accessToken).map(t-> t.getAdditionalInformation().getOrDefault(
+                    AccessTokenConverter.JTI, "")).orElse("");
             responseBuilder
                     .setToken(Optional.ofNullable(accessToken).map(OAuth2AccessToken::getValue).orElse(""))
-                    .setJti((String) Optional.ofNullable(accessToken).map(t-> t.getAdditionalInformation().getOrDefault(
-                            AccessTokenConverter.JTI, "")).orElse(""));
+                    .setJti(jti);
+            logger.info("Produce token id={} for client={}", jti, request.getClientId());
         }catch (AuthenticationException | UnsupportedGrantTypeException |InvalidRequestException | InvalidGrantException  | InvalidClientException e ) {
             responseBuilder.setError(ErrorDescription.newBuilder().setErrorCode("AuthError").setErrorMessage(e.getMessage()));
         } catch (Exception e) {
@@ -97,9 +97,9 @@ public class TokenServiceImpl extends TokenServiceImplBase {
             responseBuilder
                     .setToken(request.getToken());
 
-            logger.info(map.toString());
         }catch (InvalidTokenException e){
-            responseBuilder.setError(ErrorDescription.newBuilder().setErrorCode("InvalidToken").setErrorMessage(e.getMessage()));
+            logger.info("Failed check token: errorCode {} error {} tokenValue {}", e.getOAuth2ErrorCode(), e.getMessage(), request.getToken());
+            responseBuilder.setError(ErrorDescription.newBuilder().setErrorCode(e.getOAuth2ErrorCode()).setErrorMessage(e.getMessage()));
         }catch (Exception e){
             responseBuilder.setError(ErrorDescription.newBuilder().setErrorCode("UnknownError").setErrorMessage(e.getMessage()));
             logger.error("Internal server error -checkToken: ", e);
