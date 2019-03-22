@@ -22,7 +22,8 @@ message User {
     int32 id = 1;
     string code = 2;
     string name = 3;
-    repeated Role roles = 4;
+    string password = 4;
+    repeated Role roles = 5;
 }
 
 message EntityIdRequest {
