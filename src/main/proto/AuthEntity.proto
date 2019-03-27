@@ -52,54 +52,27 @@ message EntityCreateResponse {
 
 // Permission API
 
-service PermissionCreateOrUpdateService {
+service PermissionService {
     rpc createOrUpdatePermission(Permission) returns (EntityCreateResponse);
-}
-
-service PermissionReadByIdService {
     rpc readByIdPermission(EntityIdRequest) returns (Permission);
-}
-
-service PermissionReadAllService {
     rpc readAllPermission(Empty) returns (PermissionAllResponse);
-}
-
-service PermissionDeleteByIdService {
     rpc deleteByIdPermission(EntityIdRequest) returns (EntityDeleteResponse);
 }
 
 // Roles API
 
-service RoleCreateOrUpdateService {
+service RoleService {
     rpc createOrUpdateRole(Role) returns (EntityCreateResponse);
-}
-
-service RoleReadByIdService {
     rpc readByIdRole(EntityIdRequest) returns (Role);
-}
-
-service RoleReadAllService {
     rpc readAllRole(Empty) returns (RoleAllResponse);
-}
-
-service RoleDeleteByIdService {
     rpc deleteByIdRole(EntityIdRequest) returns (EntityDeleteResponse);
 }
 
 // Users API
 
-service UserCreateOrUpdateService {
+service UserService {
     rpc createOrUpdateUser(User) returns (EntityCreateResponse);
-}
-
-service UserReadByIdService {
     rpc readByIdUser(EntityIdRequest) returns (User);
-}
-
-service UserReadAllService {
     rpc readAllUser(Empty) returns (UserAllResponse);
-}
-
-service UserDeleteByIdService {
     rpc deleteByIdUser(EntityIdRequest) returns (EntityDeleteResponse);
 }
