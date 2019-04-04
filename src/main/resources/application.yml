@@ -1,6 +1,4 @@
 spring:
-    profiles:
-        active: "dev"
     liquibase:
         change-log: classpath:/db/changelog/db.changelog-master.xml
     devtools:
@@ -13,6 +11,7 @@ spring:
         name:
         hikari:
             idle-timeout: 90000
+
     jpa:
         open-in-view: true
         database-platform: org.hibernate.dialect.PostgreSQL94Dialect
@@ -29,32 +28,3 @@ server:
     port: 8081
     servlet :
         context-path : /auth
----
-spring:
-    profiles: dev
-    datasource:
-        url: jdbc:postgresql://192.168.63.15:15432/sampledb
-        username: userUD6
-        password: fXrgrCUiw7rXOXLe
-
-auth-server:
-    grpc:
-        port : 8040
-    tokenServiceProp:
-        tokenValidSecond : 28800
-
----
-spring:
-    profiles: local
-    datasource:
-        url: jdbc:postgresql://localhost:5432/lm_database
-        username: lm_user
-        password: lm_user
-    jpa:
-        show-sql: false
-
-auth-server:
-    grpc:
-        port : 8040
-    tokenServiceProp:
-        tokenValidSecond : 300

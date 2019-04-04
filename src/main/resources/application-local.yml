@@ -1,0 +1,14 @@
+
+spring:
+    datasource:
+        url: jdbc:postgresql://localhost:5432/lm_database
+        username: lm_user
+        password: lm_user
+    jpa:
+        show-sql: false
+
+auth-server:
+    grpc:
+        port : 8040
+    tokenServiceProp:
+        tokenValidSecond : 300
