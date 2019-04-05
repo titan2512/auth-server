@@ -17,6 +17,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
+    private ApplicationProperties applicationProperties;
+
+    @Autowired
     BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
@@ -24,7 +27,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void globalUserDetails(final AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService)
+        auth.ldapAuthentication()
+                .userDnPatterns(applicationProperties.getLdap().getUserDnPattern())
+              //  .groupSearchBase(applicationProperties.getLdap().getGroupSearchBase())
+                .contextSource()
+                    .url(applicationProperties.getLdap().getUrl())
+                    .and()
+                .passwordCompare()
+                    .passwordEncoder(passwordEncoder)
+                    //.passwordAttribute(applicationProperties.getLdap().getPasswordAttribute())
+                    .and()
+                .and()
+                .userDetailsService(userDetailsService)
                 .and()
                 .inMemoryAuthentication()
                 .withUser("testUser").password(passwordEncoder.encode("123"))

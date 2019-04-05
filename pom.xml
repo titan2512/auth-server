@@ -61,6 +61,19 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.springframework.ldap</groupId>
+			<artifactId>spring-ldap-core</artifactId>
+			<version>RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-ldap</artifactId>
+			<version>RELEASE</version>
+		</dependency>
+
+
+		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.16.16</version>

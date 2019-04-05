@@ -13,6 +13,7 @@ public class ApplicationProperties {
 
     private final Grpc grpc= new Grpc();
     private final Jdbc jdbc = new Jdbc();
+    private final Ldap ldap = new Ldap();
     private final TokenServiceProp tokenServiceProp = new TokenServiceProp();
 
     @Data
@@ -31,5 +32,13 @@ public class ApplicationProperties {
         private String url;
         private String user;
         private String password;
+    }
+
+    @Data
+    public static class Ldap{
+        private String userDnPattern;
+        private String url;
+        private String passwordAttribute;
+        private String groupSearchBase;
     }
 }

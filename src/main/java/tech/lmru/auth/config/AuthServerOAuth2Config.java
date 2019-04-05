@@ -3,8 +3,6 @@ package tech.lmru.auth.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -17,8 +15,6 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import tech.lmru.auth.jwt.converter.JwtAccessWithUserCredentialTokenConverter;
 
-import javax.sql.DataSource;
-
 /**
  * Created by Ilya on 06.03.2019.
  */
@@ -29,8 +25,6 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
     @Autowired
     private ApplicationProperties applicationProperties;
 
-    //@Autowired
-    //@Qualifier("authenticationManagerBean")
     private AuthenticationManager authenticationManager;
 
     @Autowired
@@ -53,7 +47,6 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
         .tokenStore(tokenStore()).authenticationManager(authenticationManager);
     }
 
-    //@Bean
     public DefaultTokenServices tokenServices() {
         DefaultTokenServices services = new DefaultTokenServices();
         services.setTokenStore(tokenStore());

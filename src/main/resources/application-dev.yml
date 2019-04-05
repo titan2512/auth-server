@@ -9,3 +9,9 @@ auth-server:
         port : 8040
     tokenServiceProp:
         tokenValidSecond : 28800
+
+    ldap:
+      url: ldap://192.168.10.252/dc=egar,dc=egartech,dc=com
+      userDnPattern: login={0}
+      passwordAttribute: userPassword
+      groupSearchBase: ou=groups
