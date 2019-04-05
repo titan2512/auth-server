@@ -69,7 +69,7 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-ldap</artifactId>
-			<version>RELEASE</version>
+			<version>4.2.2.RELEASE</version>
 		</dependency>
 
 

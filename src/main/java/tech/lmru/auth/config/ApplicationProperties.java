@@ -36,9 +36,8 @@ public class ApplicationProperties {
 
     @Data
     public static class Ldap{
-        private String userDnPattern;
         private String url;
-        private String passwordAttribute;
-        private String groupSearchBase;
+        private String nameAttribute;
+        private String domain;
     }
 }
