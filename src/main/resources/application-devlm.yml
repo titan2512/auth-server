@@ -1,0 +1,11 @@
+spring:
+    datasource:
+        url: jdbc:postgresql://192.168.63.15:15432/sampledb
+        username: userUD6
+        password: fXrgrCUiw7rXOXLe
+
+auth-server:
+    grpc:
+        port : 8030
+    tokenServiceProp:
+        tokenValidSecond : 28800
