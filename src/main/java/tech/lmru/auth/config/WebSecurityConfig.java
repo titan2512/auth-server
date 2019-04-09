@@ -7,6 +7,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,15 +33,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsContextMapper userDetailsContextMapper;
 
-    @Autowired
-    public void globalUserDetails(final AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(createAuthenticationProvider())
-                .userDetailsService(userDetailsService)
-                .and()
-                .inMemoryAuthentication()
-                .withUser("testUser").password(passwordEncoder.encode("123"))
-                .roles("USER")
-                .authorities(new SimpleGrantedAuthority("test_cred1"), new SimpleGrantedAuthority("test_cred2"));
+    public void globalUserDetails(AuthenticationManagerBuilder auth) throws Exception {
+        if (applicationProperties.getLdap()!=null) {
+            auth=auth.authenticationProvider(createLDAPAuthenticationProvider());
+        }
+        auth.userDetailsService(userDetailsService)
+            .and()
+            .inMemoryAuthentication()
+            .withUser("testUser").password(passwordEncoder.encode("123"))
+            .roles("USER")
+            .authorities(new SimpleGrantedAuthority("test_cred1"), new SimpleGrantedAuthority("test_cred2"));
     }
 
     @Bean
@@ -48,12 +51,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    public AuthenticationProvider createAuthenticationProvider() {
-        ActiveDirectoryLdapAuthenticationProvider provider =
+    public AuthenticationProvider createLDAPAuthenticationProvider() {
+            ActiveDirectoryLdapAuthenticationProvider provider =
                 new ActiveDirectoryLdapAuthenticationProvider(applicationProperties.getLdap().getDomain(), applicationProperties.getLdap().getUrl());
-        provider.setConvertSubErrorCodesToExceptions(true);
-        provider.setUseAuthenticationRequestCredentials(true);
-        provider.setUserDetailsContextMapper(userDetailsContextMapper);
-        return provider;
+            provider.setConvertSubErrorCodesToExceptions(true);
+            provider.setUseAuthenticationRequestCredentials(true);
+            provider.setUserDetailsContextMapper(userDetailsContextMapper);
+            return provider;
+
     }
 }

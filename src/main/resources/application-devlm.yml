@@ -1,8 +1,8 @@
 spring:
     datasource:
-        url: jdbc:postgresql://192.168.63.15:15432/sampledb
-        username: userUD6
-        password: fXrgrCUiw7rXOXLe
+        url: ${PG_URL}
+        username: ${PG_USERNAME}
+        password: ${PG_PASSWORD}
 
 auth-server:
     grpc:
