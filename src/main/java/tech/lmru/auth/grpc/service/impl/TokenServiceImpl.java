@@ -77,7 +77,6 @@ public class TokenServiceImpl extends TokenServiceImplBase {
             logger.info("Produce token id={} for client={}", jti, request.getClientId());
         }catch (AuthenticationException | UnsupportedGrantTypeException |InvalidRequestException | InvalidGrantException  | InvalidClientException e ) {
             responseBuilder.setError(ErrorDescription.newBuilder().setErrorCode("AuthError").setErrorMessage(e.getMessage()));
-            e.printStackTrace();
         } catch (Exception e) {
             responseBuilder.setError(ErrorDescription.newBuilder().setErrorCode("UnknownError").setErrorMessage(e.getMessage()));
             logger.error("Internal server error -getToken: ", e);
