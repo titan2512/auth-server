@@ -36,6 +36,7 @@ public class ApplicationProperties {
 
     @Data
     public static class Ldap{
+        private boolean enable = false;
         private String url;
         private String nameAttribute;
         private String domain;

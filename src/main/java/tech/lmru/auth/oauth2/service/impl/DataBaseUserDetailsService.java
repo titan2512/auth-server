@@ -1,5 +1,7 @@
 package tech.lmru.auth.oauth2.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,6 +31,8 @@ import static java.util.stream.Collectors.toList;
 @Transactional
 public class DataBaseUserDetailsService implements UserDetailsService {
 
+    private final Logger logger = LoggerFactory.getLogger(DataBaseUserDetailsService.class);
+
     @Inject
     UserRepository userRepository;
 
@@ -42,6 +46,7 @@ public class DataBaseUserDetailsService implements UserDetailsService {
         }
         User user = userRepository.findByCode(login);
         if (user==null) {
+            logger.warn("User with login {} not found in database", login);
             throw new UsernameNotFoundException(String.format("User with login %s not found", login));
         }
         return new org.springframework.security.core.userdetails.User(login, passwordEncoder.encode("pass"), true, true, true, true,

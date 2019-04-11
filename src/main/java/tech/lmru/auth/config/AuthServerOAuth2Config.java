@@ -25,6 +25,7 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
     @Autowired
     private ApplicationProperties applicationProperties;
 
+    @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired

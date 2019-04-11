@@ -11,6 +11,7 @@ auth-server:
         tokenValidSecond : 28800
 
     ldap:
+      enable: true
       url: ldap://192.168.10.252
       nameAttribute: name
       domain : egar.egartech.com
