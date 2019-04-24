@@ -65,7 +65,9 @@ node ('internet-enabled') {
                     sh "sed -i 's#JENKINS_DOCKER_IMAGE_NAME#${docker_image_name}#' ./ci/*.yaml"
                     sh "sed -i 's#JENKINS_DOCKER_IMAGE_TAG#${docker_image_tag}#' ./ci/*.yaml"
                     sh "sed -i 's#JENKINS_BRANCH_NAME#${env.BRANCH}#' ./ci/*.yaml"
-                    sh "docker run --rm --net=host -v ${workspace}/.kube:/config/.kube -v ${workspace}/ci:/ci -e KUBECONFIG=/config/.kube/config bitnami/kubectl apply -f /ci"
+                    docker.image('docker.art.lmru.tech/bitnami/kubectl').inside("-e KUBECONFIG=${workspace}/.kube/config --net=host ") {
+                        sh "kubectl apply -f ci"
+                    }
                 }
             }
 
