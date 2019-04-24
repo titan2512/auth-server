@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oauth-authorization
+  labels:
+    app: oauth
+    tier: backend 
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: oauth
+      tier: backend
+  template:
+    metadata:
+      labels:
+        app: oauth
+        tier: backend
+    spec:
+      containers:
+      - name: oauth-service
+        image: docker-local-customer-delivery-system.art.lmru.tech/cds/oauth-authorization-server:0.6
+        envFrom:
+          - configMapRef:
+              name: cds-configmap
+        ports:
+        - name: tomcathttp 
+          containerPort: 8080
+        - name: grpc
+          containerPort: 8030
+      - name: oauth-envoy
+        image: docker-local-customer-delivery-system.art.lmru.tech/cds/envoy:0.3
+        imagePullPolicy: Always
+        ports:
+        - name: grpc-web
+          containerPort: 8031

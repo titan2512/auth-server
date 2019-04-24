@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: oauth-authorization
+  labels:
+    app: oauth
+    tier: backend    
+spec:
+  type: NodePort
+  ports:
+   - name: tomcathttp 
+     port: 8080
+   - name: grpc
+     port: 8030
+   - name: grpc-web
+     port: 8031
+  selector:
+    app: oauth
+    tier: backend
