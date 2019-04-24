@@ -21,4 +21,4 @@ ENV LANG="en_US.UTF-8" \
     LC_CTYPE="en_US.UTF-8" \
     LC_ALL="en_US.UTF-8" \
     JAVA_OPTS="$JAVA_OPTS -Dspring.profiles.active=devlm"
-COPY --from=build /opt/app/target/auth-server*.war /usr/local/tomcat/webapps/oauth-authorization-server.war
+COPY --from=build /opt/app/target/oauth-*.war /usr/local/tomcat/webapps/oauth-authorization-server.war
