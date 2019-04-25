@@ -6,7 +6,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration;
 
 @Data
-@Configuration
 @EnableConfigurationProperties
 @ConfigurationProperties(prefix = "auth-server", ignoreInvalidFields = true)
 public class ApplicationProperties {
